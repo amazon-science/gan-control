@@ -39,6 +39,21 @@ We demonstrate that our approach achieves state-of-the-art performance both qual
 <center><img src="images/dog_control.png" width="400"></center>
 
 
+## Inference
+Download the [trained GAN](https://drive.google.com/file/d/19v0lX69fV6zQv2HbbYUVr9gZ8ZKvUzHq/view?usp=sharing) and save it in `resources/gan_models`.
+
+Examples on how to explicitly and implicitly control the GAN's generation can be found in `notebooks/gan_control_inference_example.ipynb`.
+
+Examples include:
+1. Explicitly controlling pose.
+2. Explicitly controlling age.
+3. Explicitly controlling hair color.
+4. Explicitly controlling illumination.
+5. Explicitly controlling expression.
+6. Accessing and implicitly modifying the GAN's latent space.
+
+Examples for projecting images to latent space can be found in `notebooks/projection_example.ipynb`.
+
 ## Training
 The training process consists of phases:
 1. Training a disentangled GAN.
@@ -93,20 +108,6 @@ Following are instructions to download and prepare the predictors used for runni
    1. Download the caffe `dex_imdb_wiki.caffemodel` model from [IMDB-WIKI](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/#:~:text=real%20age%20estimation%20trained%20on%20imdb-wiki).
    2. Convert the model to pytorch. You can use this [converter](https://github.com/vadimkantorov/caffemodel2pytorch). 
 
-## Inference
-Download the [trained GAN](https://drive.google.com/file/d/19v0lX69fV6zQv2HbbYUVr9gZ8ZKvUzHq/view?usp=sharing) and save it in `resources/gan_models`.
-
-Examples on how to explicitly and implicitly control the GAN's generation can be found in `notebooks/gan_control_inference_example.ipynb`.
-
-Examples include:
-1. Explicitly controlling pose.
-2. Explicitly controlling age.
-3. Explicitly controlling hair color.
-4. Explicitly controlling illumination.
-5. Explicitly controlling expression.
-6. Accessing and implicitly modifying the GAN's latent space.
-
-Examples for projecting images to latent space can be found in `notebooks/projection_example.ipynb`.
 
 ## Citation
 Please consider citing our work if you find it useful for your research:
