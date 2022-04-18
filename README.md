@@ -52,8 +52,6 @@ Examples include:
 5. Explicitly controlling expression.
 6. Accessing and implicitly modifying the GAN's latent space.
 
-Examples for projecting images to latent space can be found in `notebooks/projection_example.ipynb`.
-
 ## Training
 The training process consists of two phases:
 1. Training a disentangled GAN.
