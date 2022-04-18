@@ -4,7 +4,7 @@
 <!--![Intro Figure](images/controllable_gan.gif)-->
 <img src="images/controllable_gan.gif" width="300" height="169"/>
 
-This is a pyTorch implementation of the following paper:
+This is a PyTorch implementation of the following paper:
 
 **GAN-Control: Explicitly Controllable GANs**, ICCV 2021, [[paper]](https://arxiv.org/abs/2101.02477) [[project page]](https://alonshoshan10.github.io/gan_control/).
 
@@ -55,7 +55,7 @@ Examples include:
 Examples for projecting images to latent space can be found in `notebooks/projection_example.ipynb`.
 
 ## Training
-The training process consists of phases:
+The training process consists of two phases:
 1. Training a disentangled GAN.
 2. Training control/attribute encoders:
    1. Constructing a {control/attribute : w latent} dataset. 
@@ -107,7 +107,7 @@ Following are instructions to download and prepare the predictors used for runni
 7. DEX (Age):
    1. Download the caffe `dex_imdb_wiki.caffemodel` model from [IMDB-WIKI](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/#:~:text=real%20age%20estimation%20trained%20on%20imdb-wiki).
    2. Convert the model to pytorch. You can use this [converter](https://github.com/vadimkantorov/caffemodel2pytorch). 
-
+The predictors should be saved in `src/gan_control/pretrained_models`
 
 ## Citation
 Please consider citing our work if you find it useful for your research:
