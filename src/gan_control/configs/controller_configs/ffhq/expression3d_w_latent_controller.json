@@ -1,0 +1,50 @@
+{
+  "save_name": "id25_or02_ex01_gamma04_hair01_age02",
+  "results_dir": "/mnt/md4/orville/Alon/research_desk/control_models/latent_rec_l1",
+  "model_config": {
+    "latent_size": 512,
+    "size": 512,
+    "lr_mlp": 0.01,
+    "n_mlp": 4,
+    "in_dim": 64,
+    "mid_dim": 512,
+    "loss": "expression_loss"
+  },
+  "training_config": {
+    "debug": false,
+    "rec_loss": "l1",
+    "generator_dir": "/mnt/md4/orville/Alon/res_gan/controllable_ffhq512/id25_or02_ex01_gamma04_hair01_age02_20200817-091636",
+    "iter": 800000,
+    "start_iter": 0,
+    "batch": 128,
+    "reg_every": 4,
+    "lr": 0.002,
+    "parallel": true,
+    "generate_controls": "sampled_df",
+    "controller_type": "latent_w",
+    "sampled_df_path": "/mnt/md4/orville/Alon/research_desk/attributes_dfs/samples200K_id25_or02_ex01_gamma04_hair01_age02_20200817-091636_df.pkl",
+    "min_evaluate_interval": 5000,
+    "save_images_interval": 5000,
+    "save_nets_interval": 20000,
+    "losses": ["latent_rec", "latent_adv_", "attribute_rec_"],
+    "attribute_rec_w": 0.01
+  },
+  "data_config": {
+    "data_set_name": "ffhq",
+    "path": "/mnt/md4/orville/Alon/res/research_gan/ffhq-dataset/images1024x1024",
+    "workers": 32
+  },
+  "evaluation_config": {
+    "sample_batch": 16
+  },
+  "tensorboard_config": {
+    "enabled": true
+  },
+  "monitor_config": {
+    "enabled": false
+  },
+  "ckpt_config": {
+    "enabled": false,
+    "ckpt": "no_ckpt"
+  }
+}

@@ -1,0 +1,315 @@
+{
+  "save_name": "id_orientation",
+  "results_dir": "results/gan_models/afhq",
+  "add_weight_to_name": true,
+  "model_config": {
+    "vanilla": false,
+    "img_channels": 3,
+    "split_fc": true,
+    "marge_fc": false,
+    "latent_size": 512,
+    "size": 512,
+    "n_mlp": 8,
+    "channel_multiplier": 2.0,
+    "conv_transpose": true,
+    "g_noise_mode": "normal"
+  },
+  "training_config": {
+    "debug": false,
+    "parallel_grad_regularize_step": true,
+    "iter": 1200000,
+    "start_iter": 0,
+    "batch": 16,
+    "mini_batch": 16,
+    "mini_batch_mode": "normal",
+    "transfer_learning_model": {
+      "enabled": false,
+      "model_path": "path to a pre-trained gan (not required)"
+    },
+    "augment": {
+      "enabled": true,
+      "ada_target": 0.6,
+      "ada_length": 500000,
+      "p": 0
+    },
+    "sub_groups_dict": {
+      "dog_id": {
+        "count_in_mini_bach": [2, 12],
+        "place_in_mini_batch": [0, 6],
+        "place_in_latent": [0, 192]
+      },
+      "orientation": {
+        "count_in_mini_bach": [2, 12],
+        "place_in_mini_batch": [6, 12],
+        "place_in_latent": [192, 384]
+      },
+      "other": {
+        "count_in_mini_bach": [2, 12],
+        "place_in_mini_batch": [12, 16],
+        "place_in_latent": [384, 512]
+      }
+    },
+
+    "r1": 0.5,
+    "d_every": 1,
+    "g_reg_every": 4,
+    "d_reg_every": 16,
+    "lr_g": 0.0025,
+    "lr_d": 0.0025,
+    "g_moving_average": 20000,
+    "path_regularize": 2,
+    "path_batch_shrink": 2,
+    "mixing": 0,
+
+    "parallel": true,
+
+    "dog_id_loss": {
+      "enabled": true,
+      "center_crop": null,
+      "model_path": "pretrained_models/dogfacenet/models/pytorch_converted_model.pt",
+      "lower_thres": [],
+      "upper_thres": [],
+      "last_lower_thres": 0.0,
+      "last_upper_thres": 1.8,
+      "intermediate_layers_weights": [],
+      "last_layer_weight": 0.05,
+      "same_group_name": "dog_id",
+      "focus_on_list": [
+        "same_as_last_layer"
+      ]
+    },
+    "embedding_loss": {
+      "enabled": false,
+      "center_crop": 480,
+      "model_path": "pretrained_models/model_ir_se50.pth",
+      "num_layers": 50,
+      "drop_ratio": 0.6,
+      "mode": "ir_se",
+      "lower_thres": [0.154, 0.161, 0.202, 0.166],
+      "upper_thres": [0.186, 0.185, 0.231, 0.129],
+      "last_lower_thres": 0.5,
+      "last_upper_thres": 1.8,
+      "intermediate_layers_weights": [0, 0, 0, 0],
+      "last_layer_weight": 0.25,
+      "same_group_name": "dog_id",
+      "focus_on_list": [
+        "not_same_as_last_layer",
+        "not_same_as_last_layer",
+        "not_same_as_last_layer",
+        "not_same_as_last_layer",
+        "same_as_last_layer"
+      ]
+    },
+    "style_loss": {
+      "enabled": false,
+      "center_crop": null,
+      "resize_to": 256,
+      "intermediate_criterion_as_last_layer": true,
+      "lower_thres": [0.12, 0.22, 0.3],
+      "upper_thres": [3.5, 3, 3.5],
+      "last_lower_thres": 0.2,
+      "last_upper_thres": 0.4,
+      "intermediate_layers_weights": [0.2, 0.2, 0.1],
+      "last_layer_weight": 0.4,
+      "same_group_name": "other",
+      "focus_on_list": [
+        "same_as_last_layer",
+        "same_as_last_layer",
+        "same_as_last_layer",
+        "same_as_last_layer"
+      ]
+    },
+    "classification_loss": {
+      "enabled": true,
+      "center_crop": null,
+      "intermediate_criterion_as_last_layer": true,
+      "lower_thres": [1],
+      "upper_thres": [2.3],
+      "last_lower_thres": 0.3,
+      "last_upper_thres": 0.6,
+      "intermediate_layers_weights": [0],
+      "last_layer_weight": 0.1,
+      "same_group_name": "dog_id",
+      "focus_on_list": [
+        "same_as_last_layer",
+        "same_as_last_layer"
+      ]
+    },
+    "expression_loss": {
+      "enabled": false,
+      "center_crop": 480,
+      "model_path": "pretrained_models/esr_9",
+      "lower_thres": [0.138],
+      "upper_thres": [0.160],
+      "last_lower_thres": 0.6,
+      "last_upper_thres": 1.8,
+      "intermediate_layers_weights": [0],
+      "last_layer_weight": 0.2,
+      "same_group_name": "dog_id",
+      "focus_on_list": [
+        "not_same_as_last_layer",
+        "same_as_last_layer"
+      ]
+    },
+    "orientation_loss": {
+      "enabled": true,
+      "center_crop": null,
+      "model_path": "pretrained_models/hopenet_robust_alpha1.pkl",
+      "lower_thres": [0.138, 0.123, 0.055, 0.304],
+      "upper_thres": [0.160, 1.137, 0.058, 0.634],
+      "last_lower_thres": 0.2,
+      "last_upper_thres": 1.75,
+      "intermediate_layers_weights": [0, 0, 0, 0],
+      "last_layer_weight": 0.1,
+      "same_group_name": "orientation",
+      "focus_on_list": [
+        "not_same_as_last_layer",
+        "not_same_as_last_layer",
+        "not_same_as_last_layer",
+        "not_same_as_last_layer",
+        "same_as_last_layer"
+      ]
+    },
+    "age_loss": {
+      "enabled": false,
+      "center_crop": 480,
+      "model_path": "pretrained_models/dex_imdb_wiki.pt",
+      "lower_thres": [],
+      "upper_thres": [],
+      "last_lower_thres": 0.4,
+      "last_upper_thres": 1.4,
+      "intermediate_layers_weights": [],
+      "last_layer_weight": 0.15,
+      "same_group_name": "dog_id",
+      "focus_on_list": [
+        "same_as_last_layer"
+      ]
+    },
+    "hair_loss": {
+      "enabled": false,
+      "center_crop": null,
+      "model_path": "pretrained_models/pspnet_resnet101_sgd_lr_0.002_epoch_100_test_iou_0.918.pth",
+      "lower_thres": [],
+      "upper_thres": [],
+      "last_lower_thres": 0.00,
+      "last_upper_thres": 0.2,
+      "intermediate_layers_weights": [],
+      "last_layer_weight": 0.4,
+      "same_group_name": "dog_id",
+      "focus_on_list": [
+        "same_as_last_layer"
+      ]
+    },
+    "recon_3d_loss": {
+      "enabled": false,
+      "center_crop": 480,
+      "model_path": "pretrained_models/face3dmm_recon/models/pytorch_converted_model.pt",
+      "lower_thres": [],
+        "upper_thres": [],
+        "last_lower_thres": 0.5,
+        "last_upper_thres": 1.6,
+        "intermediate_layers_weights": [],
+        "last_layer_weight": 0.25,
+        "same_group_name": "dog_id",
+        "focus_on_list": [
+          "same_as_last_layer"
+        ],
+      "id_loss": {
+        "enabled": false
+      },
+      "ex_loss": {
+        "enabled": false,
+        "lower_thres": [],
+        "upper_thres": [],
+        "last_lower_thres": 0.15,
+        "last_upper_thres": 0.25,
+        "intermediate_layers_weights": [],
+        "last_layer_weight": 0.2,
+        "same_group_name": "dog_id",
+        "focus_on_list": [
+          "same_as_last_layer"
+        ]
+      },
+      "tex_loss": {
+        "enabled": false
+      },
+      "angles_loss": {
+        "enabled": false,
+        "lower_thres": [],
+        "upper_thres": [],
+        "last_lower_thres": 0.01,
+        "last_upper_thres": 0.16,
+        "intermediate_layers_weights": [],
+        "last_layer_weight": 1,
+        "same_group_name": "dog_id",
+        "focus_on_list": [
+          "same_as_last_layer"
+        ]
+      },
+      "gamma_loss": {
+        "enabled": false,
+        "lower_thres": [],
+        "upper_thres": [],
+        "last_lower_thres": 0.00,
+        "last_upper_thres": 0.08,
+        "intermediate_layers_weights": [],
+        "last_layer_weight": 3,
+        "same_group_name": "dog_id",
+        "focus_on_list": [
+          "same_as_last_layer"
+        ]
+      },
+      "xy_loss": {
+        "enabled": false
+      },
+      "z_loss": {
+        "enabled": false
+      }
+    },
+
+    "min_evaluate_interval": 100,
+    "save_images_interval": 2000,
+    "save_nets_interval": 10000
+
+  },
+  "data_config": {
+    "data_set_name": "afhq",
+    "path": "/mnt/md4/orville/Alon/res/research_gan/stargan2/data/afhq",
+    "workers": 32
+  },
+  "evaluation_config": {
+    "fid": {
+      "enabled": true,
+      "inception_stat_path": "inception_stats/inception_afhq_512X512.pkl",
+      "fid_interval": 10000,
+      "num_of_samples": 50000
+    },
+    "separability": {
+      "enabled": true,
+      "separability_interval": 30000,
+      "num_of_samples": 2000,
+      "losses": ["dog_id_loss"],
+      "last_layer_separability_only": true
+    },
+    "orientation_hist": {
+      "enabled": true,
+      "orientation_hist_interval": 30000,
+      "num_of_samples": 2000
+    },
+    "expression_bar": {
+      "enabled": true,
+      "expression_bar_interval": 30000,
+      "num_of_samples": 2000
+    }
+  },
+  "tensorboard_config": {
+    "enabled": true
+  },
+  "monitor_config": {
+    "enabled": false
+  },
+  "ckpt_config": {
+    "enabled": false,
+    "ckpt": "no_ckpt"
+  }
+}
