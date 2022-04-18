@@ -13,9 +13,9 @@ _log = get_logger(__name__)
 
 
 class Controller(Inference):
-    def __init__(self, controller_dir):
+    def __init__(self, controller_dir, device='cuda:0'):
         _log.info('Init Controller class...')
-        super(Controller, self).__init__(os.path.join(controller_dir, 'generator'))
+        super(Controller, self).__init__(os.path.join(controller_dir, 'generator'), device)
         self.fc_controls = {}
         self.config_controls = {}
         for sub_group_name in self.batch_utils.sub_group_names:
@@ -29,21 +29,21 @@ class Controller(Inference):
     @torch.no_grad()
     def gen_batch_by_controls(self, batch_size=1, latent=None, normalize=True, input_is_latent=False, static_noise=True, **kwargs):
         if latent is None:
-            latent = torch.randn(batch_size, self.config.model_config['latent_size'], device='cuda')
+            latent = torch.randn(batch_size, self.config.model_config['latent_size'], device=self.device)
         latent = latent.clone()
         if input_is_latent:
             latent_w = latent
         else:
             if isinstance(self.model, torch.nn.DataParallel):
-                latent_w = self.model.module.style(latent.cuda())
+                latent_w = self.model.module.style(latent.to(self.device))
             else:
-                latent_w = self.model.style(latent.cuda())
+                latent_w = self.model.style(latent.to(self.device))
         for group_key in kwargs.keys():
             if self.check_if_group_has_control(group_key):
                 if group_key == 'expression' and kwargs[group_key].shape[1] == 8:
-                    group_w_latent = self.fc_controls['expression_q'](kwargs[group_key].cuda().float())
+                    group_w_latent = self.fc_controls['expression_q'](kwargs[group_key].to(self.device).float())
                 else:
-                    group_w_latent = self.fc_controls[group_key](kwargs[group_key].cuda().float())
+                    group_w_latent = self.fc_controls[group_key](kwargs[group_key].to(self.device).float())
                 latent_w = self.insert_group_w_latent(latent_w, group_w_latent, group_key)
         injection_noise = None
         if static_noise:
@@ -101,12 +101,12 @@ class Controller(Inference):
         ckpt_path = ckpt_list[-1]
         ckpt_iter = ckpt_path.split('.')[0]
         config = read_json(config_path, return_obj=True)
-        ckpt = torch.load(os.path.join(checkpoints_path, ckpt_path))
+        ckpt = torch.load(os.path.join(checkpoints_path, ckpt_path), map_location=self.device)
         group_chunk = self.batch_utils.place_in_latent_dict[sub_group_name if sub_group_name is not 'expression_q' else 'expression']
         group_latent_size = group_chunk[1] - group_chunk[0]
 
         _log.info('Init %s Controller...' % sub_group_name)
-        controller = FcStack(config.model_config['lr_mlp'], config.model_config['n_mlp'], config.model_config['in_dim'], config.model_config['mid_dim'], group_latent_size).cuda()
+        controller = FcStack(config.model_config['lr_mlp'], config.model_config['n_mlp'], config.model_config['in_dim'], config.model_config['mid_dim'], group_latent_size).to(self.device)
         controller.print()
 
         _log.info('Loading Controller: %s, ckpt iter %s' % (controller_dir_path, ckpt_iter))
