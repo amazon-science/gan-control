@@ -38,6 +38,9 @@ We demonstrate that our approach achieves state-of-the-art performance both qual
 **Explicitly controlling the pose of generated images of dogs:**
 <center><img src="images/dog_control.png" width="400"></center>
 
+## Web Demo
+
+- Integrated into [Huggingface Spaces 🤗](https://huggingface.co/spaces) using [Gradio](https://github.com/gradio-app/gradio). Try out the Web Demo [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/hysts/gan-control)
 
 ## Inference
 Download the [trained GAN](https://drive.google.com/file/d/19v0lX69fV6zQv2HbbYUVr9gZ8ZKvUzHq/view?usp=sharing) and save it in `resources/gan_models`.
